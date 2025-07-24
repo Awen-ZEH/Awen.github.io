@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汽车后排娱乐系统 - TECHNOVA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 全局变量定义 */
+        :root {
+            --primary-blue: #1a2a6c;
+            --primary-red: #b21f1f;
+            --accent-color: #4db8ff;
+            --section-bg: rgba(30, 30, 60, 0.7);
+            --navbar-height: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red), var(--primary-blue));
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            padding-top: var(--navbar-height);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 导航栏样式 - 修改后的布局 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--navbar-height);
+            background: rgba(26, 42, 108, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 电脑端导航布局优化 */
+        .nav-links-container {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-links-container.left-nav {
+            justify-content: flex-start;
+        }
+
+        .nav-links-container.right-nav {
+            justify-content: flex-end;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            flex: 0 0 auto;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-width: 110px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-links a.active {
+            background: var(--accent-color);
+            color: #1a2a6c;
+        }
+
+        .nav-links a .english-text {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* 默认隐藏汉堡菜单 */
+        .menu-toggle {
+            display: none;
+        }
+
+        /* 移动端导航菜单 */
+        .mobile-nav-links {
+            display: none;
+            position: fixed;
+            top: var(--navbar-height);
+            left: 0;
+            right: 0;
+            background: rgba(26, 42, 108, 0.95);
+            flex-direction: column;
+            padding: 10px;
+            gap: 5px;
+            z-index: 1000;
+        }
+
+        .mobile-nav-links.active {
+            display: flex;
+        }
+
+        .mobile-nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .mobile-nav-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .mobile-nav-links a.active {
+            background: var(--accent-color);
+            color: #1a2a6c;
+        }
+
+        .mobile-nav-links a .english-text {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* 通用头部样式 */
+        header {
+            text-align: center;
+            padding: 80px 20px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: #e0e0e0;
+        }
+
+        /* 产品展示区域 */
+        .product-section {
+            margin: 60px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--accent-color);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent-color), var(--primary-blue));
+            border-radius: 2px;
+        }
+
+        /* 板块容器 - 每个板块都有独特的渐变背景 */
+        .section-container {
+            margin: 40px 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+        }
+
+        /* 为不同板块应用不同渐变背景 */
+        .section-container:nth-child(odd) {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-red) 100%);
+        }
+
+        .section-container:nth-child(even) {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-blue) 100%);
+        }
+
+        .section-container:nth-child(3n+0) {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #8a2be2 50%, var(--primary-red) 100%);
+        }
+
+        /* 板块内容样式 */
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 30px;
+            background: rgba(30, 30, 60, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .product-info {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .product-info h2 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            color: var(--accent-color);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .product-info h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent-color), var(--primary-blue));
+            border-radius: 2px;
+        }
+
+        .features {
+            margin: 25px 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateX(10px);
+            background: rgba(77, 184, 255, 0.15);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            min-height: 50px;
+            background: rgba(77, 184, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            flex-shrink: 0;
+        }
+
+        .specs {
+            margin-top: 30px;
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .spec-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .spec-card:hover {
+            background: rgba(77, 184, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .spec-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin: 5px 0;
+        }
+
+        .spec-name {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .videos-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .video-container {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(30, 30, 60, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-header {
+            background: rgba(30, 40, 80, 0.8);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            overflow: hidden;
+        }
+
+        .custom-video-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            cursor: pointer;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .video-wrapper:hover .video-controls {
+            transform: translateY(0);
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            margin: 0 5px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .progress-container {
+            flex-grow: 1;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent-color);
+            border-radius: 3px;
+            width: 0%;
+        }
+
+        .time-display {
+            color: white;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+
+        .fullscreen-btn {
+            margin-left: auto;
+        }
+
+        .play-btn-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: opacity 0.3s ease;
+        }
+
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            background: rgba(77, 184, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: floating 3s ease-in-out infinite, pulse 2s infinite;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            background: rgba(77, 184, 255, 1);
+        }
+
+        .video-description {
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 60px 20px;
+            margin: 40px 0;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-red) 100%);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(to right, var(--accent-color), #1a75ff);
+            color: white;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(26, 117, 255, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(26, 117, 255, 0.6);
+        }
+
+        /* 联系方式区块 */
+        .contact-section {
+            background: var(--section-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 60px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        .image-card {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .image-container {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .image-card:hover .image-container img {
+            transform: scale(1.05);
+        }
+
+        .image-info {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .image-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        /* 公司定位区块 */
+        .company-section {
+            background: var(--section-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 公司定位地图样式 */
+        .map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 100%;
+            background: #1a2a6c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 实力证明区块 */
+        .proof-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .proof-item {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .proof-video {
+            width: 100%;
+            height: 250px;
+            background: #000;
+        }
+
+        .proof-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .proof-caption {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(to right, var(--accent-color), #1a75ff);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(26, 117, 255, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(26, 117, 255, 0.6);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+            color: #aaa;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 中英双语文本样式 */
+        .english-text {
+            display: block;
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 3px;
+            line-height: 1.4;
+            font-weight: 300;
+        }
+
+        h1 .english-text,
+        h2 .english-text,
+        h3 .english-text {
+            display: inline-block;
+            margin-left: 12px;
+            font-size: 0.6em;
+            vertical-align: middle;
+            position: relative;
+            top: -2px;
+        }
+
+        .feature-item .english-text {
+            font-size: 0.7em;
+            margin-top: 2px;
+        }
+
+        .video-description .english-text {
+            margin-top: 8px;
+        }
+
+        .cta-button .english-text {
+            display: inline;
+            margin-left: 8px;
+            font-size: 0.9em;
+        }
+
+        footer .english-text {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.8em;
+        }
+
+        /* 响应式设计 - 平板设备 */
+        @media (max-width: 992px) {
+
+            /* 平板设备上的导航栏调整 */
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .nav-links a {
+                min-width: 100px;
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                flex-direction: column;
+            }
+
+            .videos-wrapper {
+                flex-direction: column;
+            }
+
+            .image-gallery,
+            .proof-section {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .image-card,
+            .proof-item {
+                min-width: 100%;
+            }
+
+            .english-text {
+                font-size: 0.7em;
+            }
+
+            h1 .english-text,
+            h2 .english-text,
+            h3 .english-text {
+                display: block;
+                margin-left: 0;
+                margin-top: 5px;
+            }
+
+            .cta-button .english-text {
+                display: block;
+                margin-left: 0;
+                margin-top: 5px;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+        }
+
+        /* 响应式设计 - 移动设备 */
+        @media (max-width: 768px) {
+            :root {
+                --navbar-height: 70px;
+            }
+
+            .navbar {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 10px 15px;
+                height: var(--navbar-height);
+            }
+
+            .logo img {
+                height: 40px;
+                margin-right: 10px;
+            }
+
+            /* 显示汉堡菜单 */
+            .menu-toggle {
+                display: block;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+                padding: 10px;
+            }
+
+            /* 隐藏电脑端导航栏容器 */
+            .nav-links-container {
+                display: none;
+            }
+
+            /* 移动端导航菜单样式 */
+            .mobile-nav-links {
+                display: none;
+            }
+
+            .mobile-nav-links.active {
+                display: flex;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+                margin-bottom: 20px;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+
+            .product-info h2 {
+                font-size: 1.8rem;
+            }
+
+            .feature-icon {
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
+                min-height: 40px;
+                font-size: 1.2rem;
+                margin-right: 10px;
+            }
+
+            .product-info,
+            .video-container {
+                padding: 20px;
+            }
+
+            .spec-value {
+                font-size: 1.5rem;
+            }
+
+            .play-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .cta-button {
+                padding: 15px 30px;
+                font-size: 1.1rem;
+            }
+
+            .image-container {
+                height: 200px;
+            }
+
+            .map-container {
+                height: 250px;
+            }
+
+            .company-section>div {
+                flex-direction: column;
+            }
+
+            .proof-item,
+            .image-card {
+                min-width: 100%;
+            }
+
+            /* 移动端调整logo位置 */
+            .logo-container {
+                position: static;
+                transform: none;
+                left: auto;
+            }
+        }
+
+        /* 电脑端强制显示导航栏 */
+        @media (min-width: 769px) {
+            .nav-links-container {
+                display: flex !important;
+            }
+
+            .mobile-nav-links {
+                display: none !important;
+            }
+        }
+
+        /* 小屏幕手机优化 */
+        @media (max-width: 480px) {
+            :root {
+                --navbar-height: 60px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .product-info h2 {
+                font-size: 1.5rem;
+            }
+
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-wrapper {
+                padding-bottom: 75%;
+            }
+
+            .video-controls {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(77, 184, 255, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(77, 184, 255, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(77, 184, 255, 0);
+            }
+        }
+
+        @keyframes floating {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* 解决导航栏遮挡问题 */
+        section {
+            scroll-margin-top: calc(var(--navbar-height) + 20px);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 - 修改后的结构 -->
+    <nav class="navbar">
+        <div class="nav-links-container left-nav">
+            <div class="nav-links">
+                <a href="#products" class="active">产品系列 <span class="english-text">Products</span></a>
+                <a href="#installation">安装与兼容 <span class="english-text">Installation</span></a>
+            </div>
+        </div>
+
+        <div class="logo-container">
+            <div class="logo">
+                <img src="201(1).png" alt="TECHNOVA Logo">
+            </div>
+        </div>
+
+        <div class="nav-links-container right-nav">
+            <div class="nav-links">
+                <a href="#about">关于我们 <span class="english-text">About Us</span></a>
+                <a href="#contact">联系方式 <span class="english-text">Contact info</span></a>
+                <a href="#location">公司定位 <span class="english-text">Location</span></a>
+            </div>
+        </div>
+
+        <!-- 添加汉堡菜单按钮 -->
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <!-- 移动端导航菜单 -->
+        <div class="mobile-nav-links">
+            <a href="#products" class="active">产品系列 <span class="english-text">Products</span></a>
+            <a href="#installation">安装与兼容 <span class="english-text">Installation</span></a>
+            <a href="#about">关于我们 <span class="english-text">About Us</span></a>
+            <a href="#contact">联系方式 <span class="english-text">Contact info</span></a>
+            <a href="#location">公司定位 <span class="english-text">Location</span></a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- 主标题区 -->
+        <header>
+            <div class="header-content">
+                <h1>汽车后排娱乐系统 <span class="english-text">Car Rear Seat Entertainment System</span></h1>
+                <p class="subtitle">
+                    重新定义车载娱乐系统 - 支持旋转、可玩游戏、可刷视频，一切尽在掌握
+                    <span class="english-text">Redefining in-car entertainment - Rotatable display, gaming and video
+                        streaming, all at your fingertips</span>
+                </p>
+            </div>
+        </header>
+
+        <!-- 产品系列 -->
+        <section id="products" class="product-section">
+            <h2 class="section-title">产品系列 <span class="english-text">Product Series</span></h2>
+
+            <!-- A125 产品 -->
+            <div class="section-container">
+                <div class="main-content">
+                    <div class="product-info">
+                        <h2>A125系列 <span class="english-text">A125 Series</span></h2>
+                        <p>
+                            汽车后排娱乐系统A125融合尖端科技与优雅设计，为您提供全方位的视觉、智能和个性化体验。无论您是热衷于旅行的人士还是商务人士，它都是您理想的出行伴侣。
+                            <span class="english-text">The A125 car rear seat entertainment system combines cutting-edge
+                                technology with elegant design, offering you a comprehensive visual, intelligent and
+                                personalized experience. Whether you're a travel enthusiast or a business professional,
+                                it's your ideal travel companion.</span>
+                        </p>
+
+                        <div class="features">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <div>
+                                    <h3>追剧观影 <span class="english-text">Video Streaming</span></h3>
+                                    <p>
+                                        高清大屏+流畅解码，秒加载不卡顿，随时开启沉浸式视听盛宴
+                                        <span class="english-text">HD large screen + smooth decoding, instant loading
+                                            without lag, immersive audiovisual experience anytime</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-gamepad"></i>
+                                </div>
+                                <div>
+                                    <h3>畅玩游戏 <span class="english-text">Gaming</span></h3>
+                                    <p>
+                                        畅玩热门游戏，让你轻松掌控战局，尽享酣畅淋漓的游戏体验
+                                        <span class="english-text">Play popular games with ease, enjoy an immersive
+                                            gaming experience</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-language"></i>
+                                </div>
+                                <div>
+                                    <h3>全域语通 <span class="english-text">Multilingual Support</span></h3>
+                                    <p>
+                                        经过谷歌认证,兼容全球多种语言
+                                        <span class="english-text">Google certified, compatible with multiple languages
+                                            worldwide</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-rotate"></i>
+                                </div>
+                                <div>
+                                    <h3>自由旋屏 <span class="english-text">Rotatable Screen</span></h3>
+                                    <p>
+                                        支持旋转，屏幕自适应，横竖屏随心切换
+                                        <span class="english-text">Supports rotation, adaptive screen, switch between
+                                            landscape and portrait freely</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fa-brands fa-bluetooth"></i>
+                                </div>
+                                <div>
+                                    <h3>蓝牙互联 <span class="english-text">Bluetooth Connection</span></h3>
+                                    <p>
+                                        支持蓝牙5.0协议，可连接耳机/手柄等外设
+                                        <span class="english-text">Bluetooth 5.0 support for headphones/gamepads</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="specs">
+                            <h2>技术规格 <span class="english-text">Technical Specifications</span></h2>
+                            <div class="spec-grid">
+                                <div class="spec-card">
+                                    <div class="spec-value">12.5"</div>
+                                    <div class="spec-name">
+                                        大尺寸屏幕
+                                        <span class="english-text">Large Display</span>
+                                    </div>
+                                </div>
+                                <div class="spec-card">
+                                    <div class="spec-value">全贴和工艺</div>
+                                    <div class="spec-name">
+                                        屏幕不进灰 无死角 不反光
+                                        <span class="english-text">Full lamination, dust-proof, no dead angle,
+                                            anti-glare</span>
+                                    </div>
+                                </div>
+                                <div class="spec-card">
+                                    <div class="spec-value">2K分辨率</div>
+                                    <div class="spec-name">
+                                        QLED屏 至臻体验
+                                        <span class="english-text">2K resolution QLED screen, premium experience</span>
+                                    </div>
+                                </div>
+                                <div class="spec-card">
+                                    <div class="spec-value">无内置电池</div>
+                                    <div class="spec-name">
+                                        安全更可靠 避免电池鼓包、爆炸等问题
+                                        <span class="english-text">No built-in battery, safer and more reliable, avoids
+                                            swelling/explosion risks</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="videos-wrapper">
+                        <div class="video-container">
+                            <div class="video-header">
+                                <h2><i class="fas fa-play-circle"></i> 产品视频介绍 <span class="english-text">Product
+                                        Video</span></h2>
+                            </div>
+                            <div class="video-wrapper">
+                                <video class="custom-video-player" poster="placeholder1.jpg">
+                                    <source src="横屏（总）-副本 (1).mp4" type="video/mp4">
+                                    您的浏览器不支持HTML5视频
+                                </video>
+                                <div class="play-btn-overlay">
+                                    <div class="play-btn">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                                <div class="video-controls">
+                                    <button class="control-btn play-pause-btn"><i class="fas fa-play"></i></button>
+                                    <div class="progress-container">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                    <span class="time-display">00:00 / 00:00</span>
+                                    <button class="control-btn volume-btn"><i class="fas fa-volume-up"></i></button>
+                                    <button class="control-btn fullscreen-btn"><i class="fas fa-expand"></i></button>
+                                </div>
+                            </div>
+                            <div class="video-description">
+                                <p>
+                                    在这段视频中，您将看到汽车后排娱乐系统A125的全面展示，包括其优雅的设计、强大的功能以及实际使用场景。
+                                    <span class="english-text">In this video, you'll see a comprehensive showcase of the
+                                        A125 system, including its elegant design, powerful features and real-world
+                                        usage scenarios.</span>
+                                </p>
+                                <p>
+                                    了解如何通过这款产品提升您的出行质量。
+                                    <span class="english-text">Learn how this product can enhance your travel
+                                        experience.</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="video-container">
+                            <div class="video-header">
+                                <h2><i class="fas fa-play-circle"></i> 旋转功能演示 <span class="english-text">Rotation
+                                        Demo</span></h2>
+                            </div>
+                            <div class="video-wrapper">
+                                <video class="custom-video-player" poster="placeholder2.jpg">
+                                    <source src="A125安装.mp4" type="video/mp4">
+                                    您的浏览器不支持HTML5视频
+                                </video>
+                                <div class="play-btn-overlay">
+                                    <div class="play-btn">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                                <div class="video-controls">
+                                    <button class="control-btn play-pause-btn"><i class="fas fa-play"></i></button>
+                                    <div class="progress-container">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                    <span class="time-display">00:00 / 00:00</span>
+                                    <button class="control-btn volume-btn"><i class="fas fa-volume-up"></i></button>
+                                    <button class="control-btn fullscreen-btn"><i class="fas fa-expand"></i></button>
+                                </div>
+                            </div>
+                            <div class="video-description">
+                                <p>
+                                    展示屏幕旋转功能的实际操作效果。
+                                    <span class="english-text">Demonstrates the actual operation of the screen rotation
+                                        feature.</span>
+                                </p>
+                                <p>
+                                    横竖屏自由切换，适应不同使用场景。
+                                    <span class="english-text">Freely switch between landscape and portrait modes for
+                                        different usage scenarios.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- A101 产品 -->
+            <div class="section-container">
+                <div class="main-content">
+                    <div class="product-info">
+                        <h2>A101系列 <span class="english-text">A101 Series</span></h2>
+                        <p>
+                            汽车后排娱乐系统A101融合尖端科技与优雅设计，为您提供全方位的视觉、智能和个性化体验。无论您是热衷于旅行的人士还是商务人士，它都是您理想的出行伴侣。
+                            <span class="english-text">The A101 car rear seat entertainment system combines cutting-edge
+                                technology with elegant design, offering you a comprehensive visual, intelligent and
+                                personalized experience. Whether you're a travel enthusiast or a business professional,
+                                it's your ideal travel companion.</span>
+                        </p>
+
+                        <div class="features">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <div>
+                                    <h3>追剧观影 <span class="english-text">Video Streaming</span></h3>
+                                    <p>
+                                        高清大屏+流畅解码，秒加载不卡顿，随时开启沉浸式视听盛宴
+                                        <span class="english-text">HD large screen + smooth decoding, instant loading
+                                            without lag, immersive audiovisual experience anytime</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-language"></i>
+                                </div>
+                                <div>
+                                    <h3>全域语通 <span class="english-text">Multilingual Support</span></h3>
+                                    <p>
+                                        兼容全球多种语言
+                                        <span class="english-text">compatible with multiple languages worldwide</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                </div>
+                                <div>
+                                    <h3>上下角度调节 <span class="english-text">Adjustment of up-down angle</span></h3>
+                                    <p>
+                                        支持上下角度调节，让使用体验更贴合个人习惯
+                                        <span class="english-text">It supports up-down angle adjustment, making the
+                                            usage experience more tailored to personal habits</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-mobile-alt" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <div>
+                                    <h3>手机互联 <span class="english-text">Phone connectivity</span></h3>
+                                    <p>
+                                        支持无线carplay，手机投屏
+                                        <span class="english-text">Supports wireless CarPlay and phone screen
+                                            mirroring</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fa-brands fa-bluetooth "></i>
+                                </div>
+                                <div>
+                                    <h3>蓝牙互联 <span class="english-text">Bluetooth Connection</span></h3>
+                                    <p>
+                                        支持蓝牙协议
+                                        <span class="english-text">Support Bluetooth protocol</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="specs">
+                            <h2>技术规格 <span class="english-text">Technical Specifications</span></h2>
+                            <div class="spec-grid">
+                                <div class="spec-card">
+                                    <div class="spec-value">10.1"</div>
+                                    <div class="spec-name">
+                                        大尺寸屏幕
+                                        <span class="english-text">Large Display</span>
+                                    </div>
+                                </div>
+                                <div class="spec-card">
+                                    <div class="spec-value">全贴和工艺</div>
+                                    <div class="spec-name">
+                                        屏幕不进灰 无死角 不反光
+                                        <span class="english-text">Full lamination, dust-proof, no dead angle,
+                                            anti-glare</span>
+                                    </div>
+                                </div>
+                                <div class="spec-card">
+                                    <div class="spec-value">720P分辨率</div>
+                                    <div class="spec-name">
+                                        QLED屏 至臻体验
+                                        <span class="english-text">720P resolution QLED screen, premium
+                                            experience</span>
+                                    </div>
+                                </div>
+                                <div class="spec-card">
+                                    <div class="spec-value">无内置电池</div>
+                                    <div class="spec-name">
+                                        安全更可靠 避免电池鼓包、爆炸等问题
+                                        <span class="english-text">No built-in battery, safer and more reliable, avoids
+                                            swelling/explosion risks</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="videos-wrapper">
+                        <div class="video-container">
+                            <div class="video-header">
+                                <h2><i class="fas fa-play-circle"></i> 产品视频介绍 <span class="english-text">Product
+                                        Video</span></h2>
+                            </div>
+                            <div class="video-wrapper">
+                                <video class="custom-video-player" poster="placeholder1.jpg">
+                                    <source src="A101效果展示.mp4" type="video/mp4">
+                                    您的浏览器不支持HTML5视频
+                                </video>
+                                <div class="play-btn-overlay">
+                                    <div class="play-btn">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                                <div class="video-controls">
+                                    <button class="control-btn play-pause-btn"><i class="fas fa-play"></i></button>
+                                    <div class="progress-container">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                    <span class="time-display">00:00 / 00:00</span>
+                                    <button class="control-btn volume-btn"><i class="fas fa-volume-up"></i></button>
+                                    <button class="control-btn fullscreen-btn"><i class="fas fa-expand"></i></button>
+                                </div>
+                            </div>
+                            <div class="video-description">
+                                <p>
+                                    在这段视频中，您将看到汽车后排娱乐系统A101的全面展示，包括其优雅的设计、强大的功能以及实际使用场景。
+                                    <span class="english-text">In this video, you'll see a comprehensive showcase of the
+                                        A101 system, including its elegant design, powerful features and real-world
+                                        usage scenarios.</span>
+                                </p>
+                                <p>
+                                    了解如何通过这款产品提升您的出行质量。
+                                    <span class="english-text">Learn how this product can enhance your travel
+                                        experience.</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="video-container">
+                            <div class="video-header">
+                                <h2><i class="fas fa-play-circle"></i> 安装效果演示 <span class="english-text">Demonstration
+                                        of installation effect</span></h2>
+                            </div>
+                            <div class="video-wrapper">
+                                <video class="custom-video-player" poster="placeholder2.jpg">
+                                    <source src="A125安装.mp4" type="video/mp4">
+                                    您的浏览器不支持HTML5视频
+                                </video>
+                                <div class="play-btn-overlay">
+                                    <div class="play-btn">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                                <div class="video-controls">
+                                    <button class="control-btn play-pause-btn"><i class="fas fa-play"></i></button>
+                                    <div class="progress-container">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                    <span class="time-display">00:00 / 00:00</span>
+                                    <button class="control-btn volume-btn"><i class="fas fa-volume-up"></i></button>
+                                    <button class="control-btn fullscreen-btn"><i class="fas fa-expand"></i></button>
+                                </div>
+                            </div>
+                            <div class="video-description">
+                                <p>
+                                    展示屏幕安装的实际操作。
+                                    <span class="english-text">Demonstration of the actual operation of screen
+                                        installation.</span>
+                                </p>
+                                <p>
+                                    上下角度调节，适应不同使用场景。
+                                    <span class="english-text">Adjust the angle up and down to adapt to different usage
+                                        scenarios.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- A131 产品 -->
+            <div class="section-container">
+                <div class="main-content">
+                    <div class="product-info">
+                        <h2>A131系列 <span class="english-text">A131 Series</span></h2>
+                        <p>
+                            汽车后排娱乐系统A131融合尖端科技与优雅设计，为您提供全方位的视觉、智能和个性化体验。无论您是热衷于旅行的人士还是商务人士，它都是您理想的出行伴侣。
+                            <span class="english-text">The A131 car rear seat entertainment system combines cutting-edge
+                                technology with elegant design, offering you a comprehensive visual, intelligent and
+                                personalized experience. Whether you're a travel enthusiast or a business professional,
+                                it's your ideal travel companion.</span>
+                        </p>
+
+                        <div class="features">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <div>
+                                    <h3>追剧观影 <span class="english-text">Video Streaming</span></h3>
+                                    <p>
+                                        高清大屏+流畅解码，秒加载不卡顿，随时开启沉浸式视听盛宴
+                                        <span class="english-text">HD large screen + smooth decoding, instant loading
+                                            without lag, immersive audiovisual experience anytime</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-language"></i>
+                                </div>
+                                <div>
+                                    <h3>全域语通 <span class="english-text">Multilingual Support</span></h3>
+                                    <p>
+                                        兼容全球多种语言
+                                        <span class="english-text">compatible with multiple languages worldwide</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                </div>
+                                <div>
+                                    <h3>上下角度调节 <span class="english-text">Adjustment of up-down angle</span></h3>
+                                    <p>
+                                        支持上下角度调节，让使用体验更贴合个人习惯
+                                        <span class="english-text">It supports up-down angle adjustment, making the
+                                            usage experience more tailored to personal habits</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-mobile-alt" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <div>
+                                    <h3>手机互联 <span class="english-text">Phone connectivity</span></h3>
+                                    <p>
+                                        支持无线carplay，手机投屏
+                                        <span class="english-text">Supports wireless CarPlay and phone screen
+                                            mirroring</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fa-brands fa-bluetooth "></i>
+                                </div>
+                                <div>
+                                    <h3>蓝牙互联 <span class="english-text">Bluetooth Connection</span></h3>
+                                    <p>
+                                        支持蓝牙协议
+                                        <span class="english-text">Support Bluetooth protocol</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="specs">
+                            <h2>技术规格 <span class="english-text">Technical Specifications</span></h2>
+                            <div class="spec-grid">
+                                <div class="spec-card">
+                                    <div class="spec-value">13.1"</div>
+                                    <div class="spec-name">
+                                        大尺寸屏幕
+                                        <span class="english-text">Large Display</span>
+                                    </div>
+                                </div>
+                                <div class="spec-card">
+                                    <div class="spec-value">全贴和工艺</div>
+                                    <div class="spec-name">
+                                        屏幕不进灰 无死角 不反光
+                                        <span class="english-text">Full lamination, dust-proof, no dead angle,
+                                            anti-glare</span>
+                                    </div>
+                                </div>
+                                <div class="spec-card">
+                                    <div class="spec-value">2k分辨率</div>
+                                    <div class="spec-name">
+                                        QLED屏 至臻体验
+                                        <span class="english-text">2K resolution QLED screen, premium experience</span>
+                                    </div>
+                                </div>
+                                <div class="spec-card">
+                                    <div class="spec-value">无内置电池</div>
+                                    <div class="spec-name">
+                                        安全更可靠 避免电池鼓包、爆炸等问题
+                                        <span class="english-text">No built-in battery, safer and more reliable, avoids
+                                            swelling/explosion risks</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="videos-wrapper">
+                        <div class="video-container">
+                            <div class="video-header">
+                                <h2><i class="fas fa-play-circle"></i> 产品视频介绍 <span class="english-text">Product
+                                        Video</span></h2>
+                            </div>
+                            <div class="video-wrapper">
+                                <video class="custom-video-player" poster="placeholder1.jpg">
+                                    <source src="A131.mp4" type="video/mp4">
+                                    您的浏览器不支持HTML5视频
+                                </video>
+                                <div class="play-btn-overlay">
+                                    <div class="play-btn">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                                <div class="video-controls">
+                                    <button class="control-btn play-pause-btn"><i class="fas fa-play"></i></button>
+                                    <div class="progress-container">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                    <span class="time-display">00:00 / 00:00</span>
+                                    <button class="control-btn volume-btn"><i class="fas fa-volume-up"></i></button>
+                                    <button class="control-btn fullscreen-btn"><i class="fas fa-expand"></i></button>
+                                </div>
+                            </div>
+                            <div class="video-description">
+                                <p>
+                                    在这段视频中，您将看到汽车后排娱乐系统A131的全面展示，包括其优雅的设计、强大的功能以及实际使用场景。
+                                    <span class="english-text">In this video, you'll see a comprehensive showcase of the
+                                        A131 system, including its elegant design, powerful features and real-world
+                                        usage scenarios.</span>
+                                </p>
+                                <p>
+                                    了解如何通过这款产品提升您的出行质量。
+                                    <span class="english-text">Learn how this product can enhance your travel
+                                        experience.</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="video-container">
+                            <div class="video-header">
+                                <h2><i class="fas fa-play-circle"></i> 安装效果演示 <span class="english-text">Demonstration
+                                        of installation effect</span></h2>
+                            </div>
+                            <div class="video-wrapper">
+                                <video class="custom-video-player" poster="placeholder2.jpg">
+                                    <source src="A125安装.mp4" type="video/mp4">
+                                    您的浏览器不支持HTML5视频
+                                </video>
+                                <div class="play-btn-overlay">
+                                    <div class="play-btn">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                                <div class="video-controls">
+                                    <button class="control-btn play-pause-btn"><i class="fas fa-play"></i></button>
+                                    <div class="progress-container">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                    <span class="time-display">00:00 / 00:00</span>
+                                    <button class="control-btn volume-btn"><i class="fas fa-volume-up"></i></button>
+                                    <button class="control-btn fullscreen-btn"><i class="fas fa-expand"></i></button>
+                                </div>
+                            </div>
+                            <div class="video-description">
+                                <p>
+                                    展示屏幕安装的实际操作。
+                                    <span class="english-text">Demonstration of the actual operation of screen
+                                        installation.</span>
+                                </p>
+                                <p>
+                                    上下角度调节，适应不同使用场景。
+                                    <span class="english-text">Adjust the angle up and down to adapt to different usage
+                                        scenarios.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 安装与兼容性 -->
+        <section id="installation" class="product-section">
+            <div class="section-container">
+                <div class="main-content">
+                    <div class="product-info" style="flex: 1 1 100%;">
+                        <h2>安装与兼容性 <span class="english-text">Installation & Compatibility</span></h2>
+                        <p>
+                            我们的后排娱乐系统设计简洁，安装方便，兼容市面上大多数车型。专业安装团队可在30分钟内完成安装，不影响原车结构。
+                            <span class="english-text">Our rear seat entertainment system features a simple design
+                                and easy installation, compatible with most vehicle models on the market.
+                                Professional installation can be completed in 30 minutes without affecting the
+                                original vehicle structure.</span>
+                        </p>
+
+                        <div class="features">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-car"></i>
+                                </div>
+                                <div>
+                                    <h3>广泛兼容 <span class="english-text">Wide Compatibility</span></h3>
+                                    <p>
+                                        支持90%以上车型，包括轿车、SUV和MPV
+                                        <span class="english-text">Compatible with over 90% of vehicle models,
+                                            including sedans, SUVs and MPVs</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <div>
+                                    <h3>无损安装 <span class="english-text">Non-destructive Installation</span></h3>
+                                    <p>
+                                        无需改动原车线路，保持原厂保修
+                                        <span class="english-text">No modification to original wiring, maintains
+                                            factory warranty</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-plug"></i>
+                                </div>
+                                <div>
+                                    <h3>即插即用 <span class="english-text">Plug and Play</span></h3>
+                                    <p>
+                                        使用标准接口，安装后立即可用
+                                        <span class="english-text">Uses standard interfaces, ready to use
+                                            immediately after installation</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div>
+                                    <h3>安全可靠 <span class="english-text">Safe and Reliable</span></h3>
+                                    <p>
+                                        符合汽车级安全标准，无自燃风险
+                                        <span class="english-text">Complies with automotive safety standards, no risk of
+                                            spontaneous combustion</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div>
+                                    <h3>低功耗设计 <span class="english-text">Low Power Consumption</span></h3>
+                                    <p>
+                                        高效节能设计，不影响汽车电池寿命
+                                        <span class="english-text">Energy-efficient design, does not affect car battery
+                                            life</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我们 -->
+        <section id="about" class="company-section">
+            <h2 class="section-title">关于我们 <span class="english-text">About Us</span></h2>
+            <p>
+                以下视频和图片展示了我们的生产基地、研发团队和产品质量控制流程，证明我们的专业实力。
+                <span class="english-text">The following videos and pictures show our production base, R&D team and
+                    quality control process, demonstrating our professional capabilities.</span>
+            </p>
+
+            <div class="proof-section">
+                <!-- 视频证明 - 添加了播放器 -->
+                <div class="proof-item">
+                    <div class="video-wrapper" style="height: 250px;">
+                        <video class="custom-video-player" poster="factory-poster.jpg">
+                            <source src="工厂视频.mp4" type="video/mp4">
+                            您的浏览器不支持HTML5视频
+                        </video>
+                        <div class="play-btn-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-controls">
+                            <button class="control-btn play-pause-btn"><i class="fas fa-play"></i></button>
+                            <div class="progress-container">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <span class="time-display">00:00 / 00:00</span>
+                            <button class="control-btn volume-btn"><i class="fas fa-volume-up"></i></button>
+                            <button class="control-btn fullscreen-btn"><i class="fas fa-expand"></i></button>
+                        </div>
+                    </div>
+                    <div class="proof-caption">
+                        <h3>工厂实拍 <span class="english-text">Factory Tour</span></h3>
+                        <p>现代化生产线展示 | Modern production line</p>
+                    </div>
+                </div>
+
+                <!-- 图片证明1 -->
+                <div class="proof-item">
+                    <img src="工厂图片1.jpg" class="proof-image" alt="研发团队 | R&D Team">
+                    <div class="proof-caption">
+                        <h3>研发团队 <span class="english-text">R&D Team</span></h3>
+                        <p>专业工程师团队 | Professional engineering team</p>
+                    </div>
+                </div>
+
+                <!-- 图片证明2 -->
+                <div class="proof-item">
+                    <img src="工厂图片2.jpg" class="proof-image" alt="质量认证 | Quality Certification">
+                    <div class="proof-caption">
+                        <h3>质量认证 <span class="english-text">Quality Certification</span></h3>
+                        <p>ISO9001认证企业 | ISO9001 certified</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系我们 -->
+        <section id="contact" class="contact-section">
+            <h2 class="section-title">联系方式 <span class="english-text">Contact information
+                </span></h2>
+            <p>
+                感谢您对我们的产品感兴趣，以下是我司的联系方式和位置。
+                <span class="english-text">Thank you for your interest in our products. The following are our contact
+                    information and location.
+                </span>
+            </p>
+
+            <div class="image-gallery">
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="微信二维码.png" alt="微信二维码展示 | Display of WeChat QR code">
+                    </div>
+                    <div class="image-info">
+                        <h3>微信二维码 <span class="english-text">WeChat QR code</span></h3>
+                        <p>
+                            我的微信号码：ZEH-1989
+                            <span class="english-text">My WeChat ID: ZEH - 1989</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="WhatsApp.jpg" alt="WhatsApp二维码展示 | Display of WhatsApp QR code">
+                    </div>
+                    <div class="image-info">
+                        <h3>WhatsApp二维码 <span class="english-text">WhatsApp QR code</span></h3>
+                        <p>
+                            我的WhatsApp号码：+86 133 1874 6559
+                            <span class="english-text">My WhatsApp number: +86 133 1874 6559</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 公司定位 -->
+        <section id="location" class="company-section">
+            <h2 class="section-title">公司定位 <span class="english-text">Company Location</span></h2>
+            <h4 style="color: #E65100; margin-bottom: 8px; font-size: 0.95em;">
+                <i class="fas fa-map-marked-alt"></i> 使用高德地图定位需要先登录账号
+                <span class="english-text" style="display: block; font-size: 0.7em; color: #EF6C00;">
+                    Amap requires account login
+                </span>
+            </h4>
+            <p>
+                广州卓越汽车电子有限公司位于广州市越秀区登峰益友（国际）汽配展贸中心1A063A档口，交通便利，欢迎实地考察。
+                <span class="english-text">Guangzhou Zhuoyue Automotive Electronics Co., Ltd. is located at Booth
+                    1A063A, Dengfeng Yiyou (International) Auto Parts Exhibition and Trade Center, Yuexiu District,
+                    Guangzhou. With convenient transportation, on-site inspections are warmly welcomed.</span>
+            </p>
+
+            <div class="map-container">
+                <!-- 高德地图嵌入 -->
+                <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+                    src="https://uri.amap.com/marker?position=113.29343°,23.1456°&name=广州卓越汽车电子有限公司&src=yourwebsite&coordinate=gaode&callnative=1">
+                </iframe>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                <div>
+                    <h3><i class="fas fa-building"></i> 公司地址 <span class="english-text">Address</span></h3>
+                    <p>广州市越秀区登峰益友（国际）汽配展贸中心1A063A档口</p>
+                    <p class="english-text">Booth 1A063A, Dengfeng Yiyou (International) Auto Parts Exhibition and Trade
+                        Center, Yuexiu District, Guangzhou</p>
+                </div>
+                <div>
+                    <h3><i class="fas fa-phone-alt"></i> 联系电话 <span class="english-text">Phone</span></h3>
+                    <p>+86 133 1874 6559</p>
+                    <h3 style="margin-top: 20px;"><i class="fas fa-envelope"></i> 电子邮件 <span
+                            class="english-text">Email</span></h3>
+                    <p>0000000.com</p>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+                <a href="https://surl.amap.com/nk7Zwml179Qj" target="_blank"
+                    style="background: #4d90fe; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; text-align: center;">
+                    <i class="fas fa-map"></i> 高德地图导航<br>
+                    <span style="font-size: 0.8em;">Amap Navigation</span>
+                </a>
+                <a href="https://maps.app.goo.gl/shRCiak3R6Jmisg59" target="_blank"
+                    style="background: #4285F4; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; text-align: center;">
+                    <i class="fab fa-google"></i> Google地图导航<br>
+                    <span style="font-size: 0.8em;">Google Maps</span>
+                </a>
+                <a href="https://j.map.baidu.com/6f/Yktk" target="_blank"
+                    style="background: #3164ff; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; text-align: center;">
+                    <i class="fas fa-map-pin"></i> 百度地图导航<br>
+                    <span style="font-size: 0.8em;">Baidu Maps</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer>
+            <p>
+                &copy; 2024 TECHNOVA 广州卓越汽车电子有限公司 | 所有权利保留
+                <span class="english-text">Guangzhou Excellent Auto Electronics Co., Ltd. | All Rights Reserved</span>
+            </p>
+            <p>
+                客服热线: 000000000 | 电子邮件: 0000000
+                <span class="english-text">Customer Service: 000000000 | Email: 0000000</span>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // 页面加载时滚动到顶部
+        window.onload = function () {
+            window.scrollTo(0, 0);
+        };
+
+        // 视频播放器功能
+        document.addEventListener('DOMContentLoaded', function () {
+            // 为每个视频播放器初始化
+            document.querySelectorAll('.video-wrapper').forEach(wrapper => {
+                const video = wrapper.querySelector('video');
+                const playPauseBtn = wrapper.querySelector('.play-pause-btn');
+                const progressBar = wrapper.querySelector('.progress-bar');
+                const progressContainer = wrapper.querySelector('.progress-container');
+                const timeDisplay = wrapper.querySelector('.time-display');
+                const volumeBtn = wrapper.querySelector('.volume-btn');
+                const fullscreenBtn = wrapper.querySelector('.fullscreen-btn');
+                const videoControls = wrapper.querySelector('.video-controls');
+                const playBtnOverlay = wrapper.querySelector('.play-btn-overlay');
+                const floatingPlayBtn = wrapper.querySelector('.play-btn');
+
+                let isDragging = false;
+
+                // 播放/暂停功能
+                function togglePlay() {
+                    if (video.paused) {
+                        video.play();
+                        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        playBtnOverlay.style.opacity = '0';
+                        playBtnOverlay.style.pointerEvents = 'none';
+                    } else {
+                        video.pause();
+                        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                        playBtnOverlay.style.opacity = '1';
+                        playBtnOverlay.style.pointerEvents = 'auto';
+                    }
+                }
+                // 播放按钮点击事件
+                playPauseBtn.addEventListener('click', togglePlay);
+                if (floatingPlayBtn) {
+                    floatingPlayBtn.addEventListener('click', togglePlay);
+                }
+
+                // 视频点击播放/暂停
+                video.addEventListener('click', togglePlay);
+
+                // 更新进度条
+                video.addEventListener('timeupdate', () => {
+                    const progress = (video.currentTime / video.duration) * 100;
+                    progressBar.style.width = `${progress}%`;
+
+                    // 更新时间显示
+                    const currentMinutes = Math.floor(video.currentTime / 60);
+                    const currentSeconds = Math.floor(video.currentTime % 60);
+                    const durationMinutes = Math.floor(video.duration / 60);
+                    const durationSeconds = Math.floor(video.duration % 60);
+
+                    timeDisplay.textContent =
+                        `${currentMinutes}:${currentSeconds < 10 ? '0' + currentSeconds : currentSeconds} / 
+                         ${durationMinutes}:${durationSeconds < 10 ? '0' + durationSeconds : durationSeconds}`;
+                });
+
+                // 点击进度条跳转
+                progressContainer.addEventListener('click', (e) => {
+                    const pos = (e.pageX - progressContainer.getBoundingClientRect().left) / progressContainer.offsetWidth;
+                    video.currentTime = pos * video.duration;
+                });
+
+                // 拖动进度条
+                progressBar.addEventListener('mousedown', () => {
+                    isDragging = true;
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (isDragging) {
+                        const pos = (e.pageX - progressContainer.getBoundingClientRect().left) / progressContainer.offsetWidth;
+                        video.currentTime = pos * video.duration;
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                });
+
+                // 音量控制
+                volumeBtn.addEventListener('click', () => {
+                    if (video.volume > 0) {
+                        video.volume = 0;
+                        volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    } else {
+                        video.volume = 1;
+                        volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    }
+                });
+
+                // 全屏功能
+                fullscreenBtn.addEventListener('click', () => {
+                    if (video.requestFullscreen) {
+                        video.requestFullscreen();
+                    } else if (video.webkitRequestFullscreen) {
+                        video.webkitRequestFullscreen();
+                    } else if (video.msRequestFullscreen) {
+                        video.msRequestFullscreen();
+                    }
+                });
+
+                // 鼠标移动显示控制条
+                let controlsTimeout;
+                wrapper.addEventListener('mousemove', () => {
+                    videoControls.style.transform = 'translateY(0)';
+                    clearTimeout(controlsTimeout);
+                    controlsTimeout = setTimeout(() => {
+                        if (!video.paused) {
+                            videoControls.style.transform = 'translateY(100%)';
+                        }
+                    }, 3000);
+                });
+
+                // 视频结束重置
+                video.addEventListener('ended', () => {
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    progressBar.style.width = '0%';
+                    playBtnOverlay.style.opacity = '1';
+                    playBtnOverlay.style.pointerEvents = 'auto';
+                });
+            });
+
+            // 平滑滚动和导航栏高亮
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // 移除所有导航链接的active类
+                    document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+
+                    // 给当前点击的链接添加active类
+                    this.classList.add('active');
+
+                    // 获取目标元素
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        // 计算滚动位置（考虑导航栏高度）
+                        const offset = targetElement.offsetTop - document.querySelector('.navbar').offsetHeight - 20;
+
+                        // 平滑滚动到目标位置
+                        window.scrollTo({
+                            top: offset,
+                            behavior: 'smooth'
+                        });
+                    }
+
+                    // 如果是移动端，关闭移动菜单
+                    if (window.innerWidth <= 768) {
+                        document.querySelector('.mobile-nav-links').classList.remove('active');
+                    }
+                });
+            });
+
+            // 监听滚动事件，根据滚动位置高亮导航栏
+            window.addEventListener('scroll', function () {
+                const sections = document.querySelectorAll('section');
+                const navHeight = document.querySelector('.navbar').offsetHeight;
+                let currentSection = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+
+                    if (window.scrollY >= (sectionTop - navHeight - 50)) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+
+                document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentSection}`) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // 汉堡菜单点击事件
+            document.querySelector('.menu-toggle').addEventListener('click', function () {
+                document.querySelector('.mobile-nav-links').classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
